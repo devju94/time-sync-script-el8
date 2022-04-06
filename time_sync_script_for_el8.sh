@@ -13,10 +13,13 @@ fi
 
 # 설정 확인
 check1=`cat ${CHRONY_CONF} | grep "^pool" -c`
-check2=`cat ${CHRONY_CONF} | grep "^server" | grep "${TIME_SERVER}" | grep "iburst" -c`
+check2=`cat ${CHRONY_CONF} | grep "^server" -c`
+check3=`cat ${CHRONY_CONF} | grep "^server" | grep "${TIME_SERVER}" | grep "iburst" -c`
 if [ "${check1}" -eq 0 ] && [ "${check2}" -eq 1 ]; then
-	echo "already set 'server ${TIME_SERVER} iburst'"
-	exit 2
+    if [ "${check3}" -eq 1 ]; then
+        echo "already set 'server ${TIME_SERVER} iburst'"
+        exit 2
+    fi
 fi
 
 # chrony.conf 파일 백업
